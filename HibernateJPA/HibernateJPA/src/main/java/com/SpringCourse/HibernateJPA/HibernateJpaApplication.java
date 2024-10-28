@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication
 public class HibernateJpaApplication {
 
@@ -14,9 +16,9 @@ public class HibernateJpaApplication {
 		SpringApplication.run(HibernateJpaApplication.class, args);
 	}
 
-	public void createStudent(StudentDAO studentDAOParam) {
+	private void createStudent(StudentDAO studentDAOParam) {
 		System.out.println("Creating student object...");
-		Student theStudent = new Student("Joe", "Shmo", "joe@shmo.com");
+		Student theStudent = new Student("Bob", "Shmo", "joe@shmo.com");
 
 		System.out.println("Saving student object...");
 		studentDAOParam.save(theStudent);
@@ -24,10 +26,20 @@ public class HibernateJpaApplication {
 		System.out.println("Saved Student. ID: " + theStudent.getId());
 	}
 
+	private void queryForStudents(StudentDAO studentDAO) {
+		List<Student> listOfStudents = studentDAO.findAll();
+
+		for (Student aStudent: listOfStudents) {
+			System.out.println(aStudent);
+		}
+	}
+
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
 		return runner -> {
-			createStudent(studentDAO);
+			//createStudent(studentDAO);
+
+			queryForStudents(studentDAO);
 		};
 	}
 }
