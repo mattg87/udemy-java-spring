@@ -1,5 +1,6 @@
 package com.SpringCourse.HibernateJPA;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.SpringCourse.HibernateJPA.dao.StudentDAO;
 import com.SpringCourse.HibernateJPA.entity.Student;
 import org.springframework.boot.CommandLineRunner;
@@ -26,20 +27,30 @@ public class HibernateJpaApplication {
 		System.out.println("Saved Student. ID: " + theStudent.getId());
 	}
 
+	private void printData(List<Student> studentData) {
+		for(Student aStudent: studentData) {
+			System.out.println(aStudent);
+		}
+	}
+
 	private void queryForStudents(StudentDAO studentDAO) {
 		List<Student> listOfStudents = studentDAO.findAll();
 
-		for (Student aStudent: listOfStudents) {
-			System.out.println(aStudent);
-		}
+		printData(listOfStudents);
+	}
+
+	private void getStudentByFirstName(StudentDAO studentDAO) {
+		List<Student> listOfStudents = studentDAO.findByFirstName("Joe");
+
+		printData(listOfStudents);
 	}
 
 	@Bean
 	public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
 		return runner -> {
 			//createStudent(studentDAO);
-
-			queryForStudents(studentDAO);
+			//queryForStudents(studentDAO);
+			getStudentByFirstName(studentDAO);
 		};
 	}
 }
